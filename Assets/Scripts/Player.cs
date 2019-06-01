@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Net.Mime;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
@@ -23,6 +25,8 @@ namespace Assets.Scripts
         private bool _isMyTurn;
 
         private GameController _gameController;
+        private Canvas _canvas;
+        private Image _healthBar;
 
         #region Lifecycle
         private void Awake()
@@ -49,11 +53,16 @@ namespace Assets.Scripts
                 _lever.Rotate(new Vector3(0,0,180));
             }
 
+            _canvas = transform.Find("Canvas").GetComponent<Canvas>();
+            _healthBar = _canvas.transform.Find("Healthbar").Find("Green").GetComponent<Image>();
+
             _gameController = GameObject.FindObjectOfType<GameController>().GetComponent<GameController>();
+            TakeDamage(20);
         }
 
         private void Update()
         {
+
             if (!_isMyTurn)
                 return;
 
@@ -83,6 +92,8 @@ namespace Assets.Scripts
         private void TakeDamage(int damage)
         {
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
+
+            _healthBar.fillAmount = _maxHealth / 100f * _currentHealth / 100f;
         }
         private void Shoot()
         {
