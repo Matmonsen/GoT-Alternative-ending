@@ -37,5 +37,11 @@ namespace Assets.Scripts
             CurrentPlayer.GetComponent<Player>().SetTurn();
             _turnText.text = CurrentPlayer.name;
         }
+
+        public void PlayerDied(GameObject player)
+        {
+            Time.timeScale = 0;
+
+        }
     }
 }
