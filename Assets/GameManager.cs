@@ -19,9 +19,7 @@ public class GameManager : MonoBehaviour
     {
         _leftPlayer = _leftPlayerObject.GetComponent<Player>();
         _rightPlayer = _rightPlayerObject.GetComponent<Player>();
-
-        _leftPlayer.FinishedPlayerTurnEvent += name => _rightPlayer.SetTurn();
-        _rightPlayer.FinishedPlayerTurnEvent += name => _leftPlayer.SetTurn();
+        
     }
 
     void Start()
@@ -29,5 +27,13 @@ public class GameManager : MonoBehaviour
         _leftPlayer.SetTurn();
     }
     #endregion
+
+    public void FinishedTurn(string name)
+    {
+        if (name.Equals(_leftPlayerObject.name))
+            _rightPlayer.SetTurn();
+        else
+            _leftPlayer.SetTurn();
+    }
 
 }

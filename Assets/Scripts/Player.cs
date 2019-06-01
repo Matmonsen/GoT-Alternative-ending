@@ -11,9 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _forceMin = 300;
     [SerializeField] private float _forceMax = 1000;
 
-
-    public delegate void StringDelegate(string input);
-    public event StringDelegate FinishedPlayerTurnEvent;
+    private GameManager _gameManager;
 
     private Transform _projectileSpawn;
     private Transform _lever;
@@ -53,7 +51,8 @@ public class Player : MonoBehaviour
             GetComponent<SpriteRenderer>().flipX = true;
             _lever.Rotate(new Vector3(0,0,180));
         }
-        
+
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     private void Update()
@@ -90,7 +89,7 @@ public class Player : MonoBehaviour
     }
     private void Shoot()
     {
-        Debug.Log(transform.name + " shoot ");
+        Debug.Log(transform.name + " can shoot " + _isMyTurn);
         var projectileObject = Instantiate(_projectile, _projectileSpawn.position, Quaternion.identity);
         var projectileRigidBody = projectileObject.GetComponent<Rigidbody2D>();
         projectileRigidBody.AddForce(_lever.transform.up * _force);
@@ -118,7 +117,7 @@ public class Player : MonoBehaviour
     void FinishedTurn()
     {
         _isMyTurn = false;
-        FinishedPlayerTurnEvent?.Invoke(gameObject.name);
+        _gameManager.FinishedTurn(gameObject.name);
     }
 
     #region Controls
