@@ -78,6 +78,7 @@ namespace Assets.Scripts
             CurrentPlayer = player;
             CurrentPlayer.GetComponent<Player>().SetTurn();
 
+
             if (player.name.Equals(_playerLeft.name))
             {
                 _playerRightText.text = _playerRight.name;
