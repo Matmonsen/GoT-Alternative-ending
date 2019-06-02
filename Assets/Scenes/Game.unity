@@ -360,7 +360,7 @@ PrefabInstance:
     - target: {fileID: 1572371822049069688, guid: 366f9f8945f1ce940910b66d1f4848c4,
         type: 3}
       propertyPath: m_Name
-      value: Canvas
+      value: MainUICanvas
       objectReference: {fileID: 0}
     - target: {fileID: 1572371822049069668, guid: 366f9f8945f1ce940910b66d1f4848c4,
         type: 3}
