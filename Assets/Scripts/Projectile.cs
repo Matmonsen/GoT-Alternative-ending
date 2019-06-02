@@ -7,6 +7,7 @@ namespace Assets.Scripts
         [SerializeField] private int _damage = 10;
         [SerializeField] private int _ttl = 10;
         private Rigidbody2D _rigidBody;
+        public GameObject Shooter { get; set; }
 
         private float _timeLived;
 

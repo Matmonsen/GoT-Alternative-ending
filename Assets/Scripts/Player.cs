@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts
@@ -66,6 +67,7 @@ namespace Assets.Scripts
 
             _originalLeverRotation = _lever.localEulerAngles;
             ShowPlayerUI(false);
+            
         }
 
         private void Update()
@@ -93,7 +95,8 @@ namespace Assets.Scripts
             var projectile = other.GetComponent<Projectile>();
             if (projectile == null)
                 return;
-
+            if (projectile.Shooter.name.Equals(name))
+                return;
             TakeDamage(projectile.Damage);
         }
 
@@ -115,9 +118,12 @@ namespace Assets.Scripts
         private void Shoot()
         {
             var projectileObject = Instantiate(_projectile, _projectileSpawn.position, Quaternion.identity);
-            projectileObject.transform.localScale = Vector3.one * .1f;
             var projectileRigidBody = projectileObject.GetComponent<Rigidbody2D>();
+            var projectile = projectileObject.GetComponent<Projectile>();
+
+            projectileObject.transform.localScale = Vector3.one * .1f;
             projectileRigidBody.AddForce(_lever.transform.up * _force, ForceMode2D.Impulse);
+            projectile.Shooter = gameObject;
 
             FinishedTurn();
         }
@@ -125,7 +131,31 @@ namespace Assets.Scripts
         private void IncreaseShotForce()
         {
             _force = Mathf.Clamp(_force + _increaseForceBy, _forceMin, _forceMax);
-            _forceBar.fillAmount = _force  / _forceMax;
+            var percentage = _force / _forceMax;
+            var color = "#d91e18";
+            
+            if (percentage < .1f)
+                color = "#2ecc71"; 
+            else if (percentage < .2f)
+                color = "#3fc380";
+            else if (percentage < .3f)
+                color = "#00b16a";
+            else if (percentage < .4f)
+                color = "#019875";
+            else if (percentage < .5f)
+                color = "#fef160";
+            else if (percentage < .6f)
+                color = "#f5e653";
+            else if (percentage < .7f)
+                color = "#f5e51b";
+            else if (percentage < .8f)
+                color = "#f62459";
+            else if (percentage < .9f)
+                color = "#f22613";
+
+            _forceBar.fillAmount = percentage;
+            ColorUtility.TryParseHtmlString(color, out var newColor);
+            _forceBar.color = newColor;
         }
 
         private void SetAngle(float speed)
