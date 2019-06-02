@@ -681,7 +681,7 @@ PrefabInstance:
     - target: {fileID: 4630747583327458536, guid: 962c47e7c5494814890f48889fcbde9c,
         type: 3}
       propertyPath: _maxHealth
-      value: 10
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 962c47e7c5494814890f48889fcbde9c, type: 3}
@@ -919,7 +919,7 @@ PrefabInstance:
     - target: {fileID: 8084249856776277602, guid: efb129d2e6c56e04599ea8bb9cb252ee,
         type: 3}
       propertyPath: _maxHealth
-      value: 10
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7231682819697331810, guid: efb129d2e6c56e04599ea8bb9cb252ee,
         type: 3}
