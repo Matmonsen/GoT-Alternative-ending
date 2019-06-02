@@ -14,9 +14,11 @@ namespace Assets.Scripts
         [SerializeField] private float _forceMin = 1;
         [SerializeField] private float _forceMax = 70;
         [SerializeField] private Sprite _killedSprite;
+        [SerializeField] private Sprite _shameSprite;
 
         public float CurrentForcePercentage { get; private set; }
         public float CurrentHealthPercentage { get; private set; } = 1;
+        public Sprite ShameImage => _shameSprite;
 
         private Transform _projectileSpawn;
         private Transform _lever;

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets.Scripts
@@ -8,12 +9,14 @@ namespace Assets.Scripts
     {
         [SerializeField] private GameObject _playerLeft;
         [SerializeField] private GameObject _playerRight;
+        [SerializeField] private float _deadFadeRate = .2f;
         public GameObject CurrentPlayer { get; private set; }
 
         private Player _leftPlayer;
         private Player _rightPlayer;
         private Image _playerLeftForce;
         private Image _playerLeftHealth;
+        private Image _winnerImage;
 
         private Image _playerRightForce;
         private Image _playerRightHealth;
@@ -22,9 +25,16 @@ namespace Assets.Scripts
         private Text _playerLeftText;
         private Text _playerRightText;
 
+
+        private Button _playAgain;
+        private Button _exitGame;
+
         private Canvas _canvas;
         private GameObject _gameEnded;
 
+        private Player _deadPlayer;
+        private SceneController _sceneManager;
+        private bool _gameHasEnded;
         void Awake()
         {
             _leftPlayer = _playerLeft.GetComponent<Player>();
@@ -42,12 +52,23 @@ namespace Assets.Scripts
             _playerLeftText = _canvas.transform.Find("Left").Find("PlayerName").GetComponent<Text>();
             _playerRightText = _canvas.transform.Find("Right").Find("PlayerName").GetComponent<Text>();
 
-            _gameEnded.SetActive(false);
+            _exitGame = _gameEnded.transform.Find("Exit").GetComponent<Button>();
+            _playAgain = _gameEnded.transform.Find("PlayAgain").GetComponent<Button>();
+
+            _winnerImage = _gameEnded.transform.Find("WinnerImage").GetComponent<Image>();
+
+            _sceneManager = GameObject.Find("SceneController").GetComponent<SceneController>();
+
         }
 
         void Start()
         {
             SetPlayer(_playerLeft);
+            _playAgain.onClick.AddListener(() => _sceneManager.ReloadScene());
+            _exitGame.onClick.AddListener(() => _sceneManager.LoadScene(SceneController.Scene_Menu));
+
+
+            _gameEnded.SetActive(false);
         }
 
         void Update()
@@ -57,6 +78,10 @@ namespace Assets.Scripts
 
             SetHealthbar(_playerLeftHealth, _leftPlayer.CurrentHealthPercentage);
             SetHealthbar(_playerRightHealth, _rightPlayer.CurrentHealthPercentage);
+
+
+            if (!_gameHasEnded)
+                return;
         }
 
         public IEnumerator TurnOver(string playerName)
@@ -85,6 +110,12 @@ namespace Assets.Scripts
             _canvas.transform.Find("Left").gameObject.SetActive(false);
             _canvas.transform.Find("Right").gameObject.SetActive(false);
 
+            _deadPlayer = player.GetComponent<Player>();
+            _winnerImage.sprite = _deadPlayer.ShameImage;
+            _gameHasEnded = true;
+
+            _rightPlayer.gameObject.SetActive(false);
+            _leftPlayer.gameObject.SetActive(false);
         }
 
         void SetHealthbar(Image healthbar, float percentage)
@@ -122,7 +153,6 @@ namespace Assets.Scripts
         IEnumerator StartNewTurn(GameObject player)
         {
             yield return new WaitUntil(() => GameObject.FindGameObjectsWithTag(Constants.Tags.Projectile).Length == 0);
-            Debug.Log("ha");
             CurrentPlayer = player;
             CurrentPlayer.GetComponent<Player>().SetTurn();
 
@@ -138,7 +168,6 @@ namespace Assets.Scripts
                 _playerLeftText.text = _playerLeft.name;
             }
         }
-
-
+        
     }
 }
