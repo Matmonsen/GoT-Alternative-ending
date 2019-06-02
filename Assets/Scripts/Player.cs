@@ -29,6 +29,7 @@ namespace Assets.Scripts
         private Canvas _canvas;
         private Image _healthBar;
         private Image _forceBar;
+        private Vector3 _originalLeverRotation;
 
         #region Lifecycle
         private void Awake()
@@ -62,16 +63,18 @@ namespace Assets.Scripts
 
             _gameController = GameObject.FindObjectOfType<GameController>().GetComponent<GameController>();
             _forceBar.fillAmount = 0;
+
+            _originalLeverRotation = _lever.localEulerAngles;
+            ShowPlayerUI(false);
         }
 
         private void Update()
         {
-
             if (!_isMyTurn)
                 return;
 
             _forceTimer += Time.deltaTime;
-
+            
             if (IsPressingShoot() && _forceTimer >= _timeBetweenEachForceIncrease)
                 IncreaseShotForce();
 
@@ -96,6 +99,11 @@ namespace Assets.Scripts
 
         #endregion
 
+        private void ShowPlayerUI(bool predicate)
+        {
+            _lever.gameObject.SetActive(predicate);
+            _forceBar.transform.parent.gameObject.SetActive(predicate);
+        }
         private void TakeDamage(int damage)
         {
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
@@ -129,6 +137,12 @@ namespace Assets.Scripts
                 newAngle = _lever.localEulerAngles.z;
             _lever.localEulerAngles = new Vector3(_lever.localEulerAngles.x, _lever.localEulerAngles.y, newAngle);
         }
+
+        private void ResetAngle()
+        {
+            _angle = 0;
+            _lever.localEulerAngles = _originalLeverRotation;
+        }
     
         private void FinishedTurn()
         {
@@ -136,6 +150,9 @@ namespace Assets.Scripts
             _force = _forceMin;
             var co = _gameController.TurnOver(name);
             StartCoroutine(co);
+
+            ShowPlayerUI(false);
+            ResetAngle();
         }
 
         private void Died()
@@ -146,6 +163,7 @@ namespace Assets.Scripts
         public void SetTurn()
         {
             _isMyTurn = true;
+            ShowPlayerUI(_isMyTurn);
         }
 
         #region Controls

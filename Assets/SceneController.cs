@@ -9,4 +9,11 @@ public class SceneController : MonoBehaviour
     {
         SceneManager.LoadScene(scene);
     }
+
+    public void ReloadScene()
+    {
+        var currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
+        Time.timeScale = 1;
+    }
 }

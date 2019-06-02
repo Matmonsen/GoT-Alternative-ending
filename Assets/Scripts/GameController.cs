@@ -12,11 +12,17 @@ namespace Assets.Scripts
 
         private Canvas _canvas;
         private Text _turnText;
+        private Text _winnerText;
+        private GameObject _gameEnded;
 
         void Awake()
         {
             _canvas = GameObject.Find("MainUICanvas").GetComponent<Canvas>();
             _turnText = _canvas.transform.Find("Turn").Find("TurnText").GetComponent<Text>();
+            _gameEnded = _canvas.transform.Find("GameEnded").gameObject;
+            _winnerText = _gameEnded.transform.Find("Winner").Find("WinnerText").GetComponent<Text>();
+
+            _gameEnded.SetActive(false);
         }
 
         // Start is called before the first frame update
@@ -24,6 +30,7 @@ namespace Assets.Scripts
         {
             SetPlayer(_playerLeft);
         }
+        
 
         public IEnumerator TurnOver(string playerName)
         {
@@ -41,7 +48,9 @@ namespace Assets.Scripts
         public void PlayerDied(GameObject player)
         {
             Time.timeScale = 0;
-
+            _gameEnded.SetActive(true);
+            _winnerText.text = player.name == _playerLeft.name ? _playerRight.name : _playerLeft.name;
+            _canvas.transform.Find("Turn").gameObject.SetActive(false);
         }
     }
 }
