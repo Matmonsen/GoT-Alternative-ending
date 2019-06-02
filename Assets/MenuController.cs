@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
@@ -19,7 +20,7 @@ public class MenuController : MonoBehaviour
     private float _timeSinceLastChange;
     private float _changeRate = .01f;
     private float _camZoomSpeed = 1.1f;
-
+    private bool _pressedStartGame;
     private bool _runSaveAnimation = false;
 
     private Vector3 _maxSize;
@@ -42,6 +43,7 @@ public class MenuController : MonoBehaviour
 
     void StartGame()
     {
+        _pressedStartGame = true;
         _button.gameObject.SetActive(false);
         // TODO: Create generic hide method
         _flag1 = GameObject.Find("Flag1").GetComponent<Image>();
@@ -62,7 +64,8 @@ public class MenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _timeSinceLastChange += Time.deltaTime;
+        if (_pressedStartGame)
+            _timeSinceLastChange += Time.deltaTime;
         
         if (_runSaveAnimation)
         {
@@ -73,7 +76,8 @@ public class MenuController : MonoBehaviour
                 Vector3.Lerp(_backgroundImage.transform.position, _endPosition, Time.deltaTime/4);
         }
 
-
+        if (_timeSinceLastChange > 2)
+            SceneManager.LoadScene(SceneController.Scene_Game);
 
 
 
