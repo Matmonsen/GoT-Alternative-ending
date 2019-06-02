@@ -75,22 +75,7 @@ namespace Assets.Scripts
                 return;
             }
 
-            CurrentPlayer = player;
-            CurrentPlayer.GetComponent<Player>().SetTurn();
-
-
-            if (player.name.Equals(_playerLeft.name))
-            {
-                _playerRightText.text = _playerRight.name;
-                _playerLeftText.text = _playerLeft.name + " (turn)";
-            }
-            else
-            {
-                _playerRightText.text = _playerRight.name + " (turn)";
-                _playerLeftText.text = _playerLeft.name;
-            }
-                
-            
+            StartCoroutine(nameof(StartNewTurn), player);
         }
 
         public void PlayerDied(GameObject player)
@@ -133,5 +118,27 @@ namespace Assets.Scripts
             forceBar.fillAmount = percentage;
             forceBar.color = newColor;
         }
+
+        IEnumerator StartNewTurn(GameObject player)
+        {
+            yield return new WaitUntil(() => GameObject.FindGameObjectsWithTag(Constants.Tags.Projectile).Length == 0);
+            Debug.Log("ha");
+            CurrentPlayer = player;
+            CurrentPlayer.GetComponent<Player>().SetTurn();
+
+
+            if (player.name.Equals(_playerLeft.name))
+            {
+                _playerRightText.text = _playerRight.name;
+                _playerLeftText.text = _playerLeft.name + " (turn)";
+            }
+            else
+            {
+                _playerRightText.text = _playerRight.name + " (turn)";
+                _playerLeftText.text = _playerLeft.name;
+            }
+        }
+
+
     }
 }

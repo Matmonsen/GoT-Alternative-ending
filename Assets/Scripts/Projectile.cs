@@ -27,6 +27,10 @@ namespace Assets.Scripts
             if (_timeLived > _ttl)
                 Destroy(gameObject);
         }
-        
+
+        void OnBecameInvisible()
+        {
+            Destroy(gameObject);
+        }
     }
 }
