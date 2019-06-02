@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ namespace Assets.Scripts
         [SerializeField] private GameObject _playerLeft;
         [SerializeField] private GameObject _playerRight;
         [SerializeField] private float _deadFadeRate = .2f;
+        private AudioSource[] _audio;
         public GameObject CurrentPlayer { get; private set; }
 
         private Player _leftPlayer;
@@ -35,8 +37,34 @@ namespace Assets.Scripts
         private Player _deadPlayer;
         private SceneController _sceneManager;
         private bool _gameHasEnded;
+
+
+        private void PlayAudio(int index)
+        {
+            try
+            {
+                _audio[index].Play();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
+        }
+
+        private void StopAudio(int index)
+        {
+            try
+            {
+                _audio[index].Stop();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
+        }
         void Awake()
         {
+            _audio = GetComponents<AudioSource>();
             _leftPlayer = _playerLeft.GetComponent<Player>();
             _rightPlayer = _playerRight.GetComponent<Player>();
 
@@ -66,8 +94,7 @@ namespace Assets.Scripts
             SetPlayer(_playerLeft);
             _playAgain.onClick.AddListener(() => _sceneManager.ReloadScene());
             _exitGame.onClick.AddListener(() => _sceneManager.LoadScene(SceneController.Scene_Menu));
-
-
+            
             _gameEnded.SetActive(false);
         }
 
@@ -116,6 +143,8 @@ namespace Assets.Scripts
 
             _rightPlayer.gameObject.SetActive(false);
             _leftPlayer.gameObject.SetActive(false);
+            StopAudio(0);
+            PlayAudio(1);
         }
 
         void SetHealthbar(Image healthbar, float percentage)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,7 @@ namespace Assets.Scripts
         public float CurrentHealthPercentage { get; private set; } = 1;
         public Sprite ShameImage => _shameSprite;
 
+        private AudioSource[] _audio;
         private Transform _projectileSpawn;
         private Transform _lever;
         private float _angle;
@@ -37,6 +39,7 @@ namespace Assets.Scripts
         #region Lifecycle
         private void Awake()
         {
+            _audio = GetComponents<AudioSource>();
             _forceTimer = 0;
             _isMyTurn = false;
             gameObject.AddComponent<PolygonCollider2D>();
@@ -63,6 +66,18 @@ namespace Assets.Scripts
 
             _originalLeverRotation = _lever.localEulerAngles;
             
+        }
+
+        private void PlayAudio(int index)
+        {
+            try
+            {
+                _audio[index].Play();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+            }
         }
 
         private void Update()
@@ -115,10 +130,12 @@ namespace Assets.Scripts
             var direction = _lever.transform.up;
             if (!_isLeftPlayer)
                 direction *= -1;
-
+            PlayAudio(0);
             projectileObject.transform.localScale = Vector3.one * .1f;
             projectileRigidBody.AddForce(direction * _force, ForceMode2D.Impulse);
             projectile.Shooter = gameObject;
+
+           
 
             FinishedTurn();
         }
@@ -158,6 +175,8 @@ namespace Assets.Scripts
 
         private void Died()
         {
+
+            PlayAudio(1);
             _gameController.PlayerDied(gameObject);
             _lever.gameObject.SetActive(false);
            GetComponent<SpriteRenderer>().sprite = _killedSprite;
