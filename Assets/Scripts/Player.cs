@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts
@@ -12,7 +13,10 @@ namespace Assets.Scripts
         [SerializeField] private float _timeBetweenEachForceIncrease = .01f;
         [SerializeField] private float _forceMin = 1;
         [SerializeField] private float _forceMax = 70;
-    
+        [SerializeField] private Sprite _killedSprite;
+
+        public float CurrentForcePercentage { get; private set; }
+        public float CurrentHealthPercentage { get; private set; } = 1;
 
         private Transform _projectileSpawn;
         private Transform _lever;
@@ -26,9 +30,6 @@ namespace Assets.Scripts
         private float _forceTimer;
 
         private GameController _gameController;
-        private Canvas _canvas;
-        private Image _healthBar;
-        private Image _forceBar;
         private Vector3 _originalLeverRotation;
 
         #region Lifecycle
@@ -50,22 +51,16 @@ namespace Assets.Scripts
             }
             else
             {
-                _minAngle = 0;
-                _maxAngle = 90;
+                _minAngle = 180;
+                _maxAngle = 270;
                 _angleSpeed *= -1;
-                GetComponent<SpriteRenderer>().flipX = true;
-                _lever.Rotate(new Vector3(0,0,180));
             }
-
-            _canvas = transform.Find("Canvas").GetComponent<Canvas>();
-            _healthBar = _canvas.transform.Find("Healthbar").Find("Green").GetComponent<Image>();
-            _forceBar = _canvas.transform.Find("Forcebar").Find("Green").GetComponent<Image>();
+            
 
             _gameController = GameObject.FindObjectOfType<GameController>().GetComponent<GameController>();
-            _forceBar.fillAmount = 0;
 
             _originalLeverRotation = _lever.localEulerAngles;
-            ShowPlayerUI(false);
+            
         }
 
         private void Update()
@@ -93,22 +88,18 @@ namespace Assets.Scripts
             var projectile = other.GetComponent<Projectile>();
             if (projectile == null)
                 return;
-
+            if (projectile.Shooter.name.Equals(name))
+                return;
             TakeDamage(projectile.Damage);
         }
 
         #endregion
-
-        private void ShowPlayerUI(bool predicate)
-        {
-            _lever.gameObject.SetActive(predicate);
-            _forceBar.transform.parent.gameObject.SetActive(predicate);
-        }
+        
         private void TakeDamage(int damage)
         {
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
 
-            _healthBar.fillAmount = _maxHealth / 100f * _currentHealth / 100f;
+            CurrentHealthPercentage = _maxHealth / 100f * _currentHealth / 100f;
 
             if (_currentHealth <= 0)
                 Died();
@@ -116,9 +107,16 @@ namespace Assets.Scripts
         private void Shoot()
         {
             var projectileObject = Instantiate(_projectile, _projectileSpawn.position, Quaternion.identity);
-            projectileObject.transform.localScale = Vector3.one * .1f;
             var projectileRigidBody = projectileObject.GetComponent<Rigidbody2D>();
-            projectileRigidBody.AddForce(_lever.transform.up * _force, ForceMode2D.Impulse);
+            var projectile = projectileObject.GetComponent<Projectile>();
+
+            var direction = _lever.transform.up;
+            if (!_isLeftPlayer)
+                direction *= -1;
+
+            projectileObject.transform.localScale = Vector3.one * .1f;
+            projectileRigidBody.AddForce(direction * _force, ForceMode2D.Impulse);
+            projectile.Shooter = gameObject;
 
             FinishedTurn();
         }
@@ -126,13 +124,15 @@ namespace Assets.Scripts
         private void IncreaseShotForce()
         {
             _force = Mathf.Clamp(_force + _increaseForceBy, _forceMin, _forceMax);
-            _forceBar.fillAmount = _force  / _forceMax;
+            var percentage = _force / _forceMax;
+
+            CurrentForcePercentage = percentage;
         }
 
         private void SetAngle(float speed)
         {
             var newAngle = _lever.localEulerAngles.z + speed;
-
+            
             if (!(newAngle + _angleSpeed > _minAngle && newAngle + _angleSpeed < _maxAngle))
                 newAngle = _lever.localEulerAngles.z;
             _lever.localEulerAngles = new Vector3(_lever.localEulerAngles.x, _lever.localEulerAngles.y, newAngle);
@@ -148,22 +148,22 @@ namespace Assets.Scripts
         {
             _isMyTurn = false;
             _force = _forceMin;
+            CurrentForcePercentage = 0;
             var co = _gameController.TurnOver(name);
             StartCoroutine(co);
-
-            ShowPlayerUI(false);
             ResetAngle();
         }
 
         private void Died()
         {
             _gameController.PlayerDied(gameObject);
+            _lever.gameObject.SetActive(false);
+           GetComponent<SpriteRenderer>().sprite = _killedSprite;
         }
 
         public void SetTurn()
         {
             _isMyTurn = true;
-            ShowPlayerUI(_isMyTurn);
         }
 
         #region Controls

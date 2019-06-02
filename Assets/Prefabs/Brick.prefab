@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3785699094312522573}
   m_Layer: 0
   m_Name: Brick
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -66,10 +66,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -594681707
+  m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6a71acff8b7f7b3499932a50561c80e4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6457af62039c8de40b34cfc045832ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Obsticle
+  - Projectile
   layers:
   - Default
   - TransparentFX
@@ -13,7 +15,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - game
   - 
   - 
   - 
@@ -38,6 +40,21 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 3983226595
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 710079249
+    locked: 0
+  - name: PlayerArm
+    uniqueID: 1819075093
+    locked: 0
+  - name: Player UI
+    uniqueID: 3472046747
+    locked: 0
+  - name: Projectile
+    uniqueID: 3700285589
     locked: 0
