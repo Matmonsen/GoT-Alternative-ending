@@ -101,7 +101,6 @@ namespace Assets.Scripts
 
         private void ShowPlayerUI(bool predicate)
         {
-            _lever.gameObject.SetActive(predicate);
             _forceBar.transform.parent.gameObject.SetActive(predicate);
         }
         private void TakeDamage(int damage)
