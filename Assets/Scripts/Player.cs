@@ -13,7 +13,10 @@ namespace Assets.Scripts
         [SerializeField] private float _timeBetweenEachForceIncrease = .01f;
         [SerializeField] private float _forceMin = 1;
         [SerializeField] private float _forceMax = 70;
-    
+        [SerializeField] private Sprite _killedSprite;
+
+        public float CurrentForcePercentage { get; private set; }
+        public float CurrentHealthPercentage { get; private set; } = 1;
 
         private Transform _projectileSpawn;
         private Transform _lever;
@@ -27,9 +30,6 @@ namespace Assets.Scripts
         private float _forceTimer;
 
         private GameController _gameController;
-        private Canvas _canvas;
-        private Image _healthBar;
-        private Image _forceBar;
         private Vector3 _originalLeverRotation;
 
         #region Lifecycle
@@ -57,21 +57,17 @@ namespace Assets.Scripts
                 GetComponent<SpriteRenderer>().flipX = true;
                 _lever.Rotate(new Vector3(0,0,180));
             }
-
-            _canvas = transform.Find("Canvas").GetComponent<Canvas>();
-            _healthBar = _canvas.transform.Find("Healthbar").Find("Green").GetComponent<Image>();
-            _forceBar = _canvas.transform.Find("Forcebar").Find("Green").GetComponent<Image>();
+            
 
             _gameController = GameObject.FindObjectOfType<GameController>().GetComponent<GameController>();
-            _forceBar.fillAmount = 0;
 
             _originalLeverRotation = _lever.localEulerAngles;
-            ShowPlayerUI(false);
             
         }
 
         private void Update()
         {
+            Debug.Log(name + " " + _isMyTurn);
             if (!_isMyTurn)
                 return;
 
@@ -101,16 +97,12 @@ namespace Assets.Scripts
         }
 
         #endregion
-
-        private void ShowPlayerUI(bool predicate)
-        {
-            _forceBar.transform.parent.gameObject.SetActive(predicate);
-        }
+        
         private void TakeDamage(int damage)
         {
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
 
-            _healthBar.fillAmount = _maxHealth / 100f * _currentHealth / 100f;
+            CurrentHealthPercentage = _maxHealth / 100f * _currentHealth / 100f;
 
             if (_currentHealth <= 0)
                 Died();
@@ -132,30 +124,8 @@ namespace Assets.Scripts
         {
             _force = Mathf.Clamp(_force + _increaseForceBy, _forceMin, _forceMax);
             var percentage = _force / _forceMax;
-            var color = "#d91e18";
-            
-            if (percentage < .1f)
-                color = "#2ecc71"; 
-            else if (percentage < .2f)
-                color = "#3fc380";
-            else if (percentage < .3f)
-                color = "#00b16a";
-            else if (percentage < .4f)
-                color = "#019875";
-            else if (percentage < .5f)
-                color = "#fef160";
-            else if (percentage < .6f)
-                color = "#f5e653";
-            else if (percentage < .7f)
-                color = "#f5e51b";
-            else if (percentage < .8f)
-                color = "#f62459";
-            else if (percentage < .9f)
-                color = "#f22613";
 
-            _forceBar.fillAmount = percentage;
-            ColorUtility.TryParseHtmlString(color, out var newColor);
-            _forceBar.color = newColor;
+            CurrentForcePercentage = percentage;
         }
 
         private void SetAngle(float speed)
@@ -177,22 +147,22 @@ namespace Assets.Scripts
         {
             _isMyTurn = false;
             _force = _forceMin;
+            CurrentForcePercentage = 0;
             var co = _gameController.TurnOver(name);
             StartCoroutine(co);
-
-            ShowPlayerUI(false);
             ResetAngle();
         }
 
         private void Died()
         {
             _gameController.PlayerDied(gameObject);
+            _lever.gameObject.SetActive(false);
+           GetComponent<SpriteRenderer>().sprite = _killedSprite;
         }
 
         public void SetTurn()
         {
             _isMyTurn = true;
-            ShowPlayerUI(_isMyTurn);
         }
 
         #region Controls

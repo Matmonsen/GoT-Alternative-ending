@@ -374,6 +374,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerLeft
       objectReference: {fileID: 0}
+    - target: {fileID: 1790824292448333244, guid: 962c47e7c5494814890f48889fcbde9c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1790824292448333246, guid: 962c47e7c5494814890f48889fcbde9c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -558,16 +563,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 569160802}
-    - target: {fileID: 1984573148580723553, guid: 366f9f8945f1ce940910b66d1f4848c4,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ReloadScene
-      objectReference: {fileID: 0}
-    - target: {fileID: 1984573148580723553, guid: 366f9f8945f1ce940910b66d1f4848c4,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1224090813305554263, guid: 366f9f8945f1ce940910b66d1f4848c4,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -647,6 +642,12 @@ PrefabInstance:
       propertyPath: _maxHealth
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 8084249856776277602, guid: efb129d2e6c56e04599ea8bb9cb252ee,
+        type: 3}
+      propertyPath: _killedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 60df4dc322b65e443991efe1716e8143,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efb129d2e6c56e04599ea8bb9cb252ee, type: 3}
 --- !u!1001 &6839094120485125112
