@@ -51,11 +51,9 @@ namespace Assets.Scripts
             }
             else
             {
-                _minAngle = 0;
-                _maxAngle = 90;
+                _minAngle = 180;
+                _maxAngle = 270;
                 _angleSpeed *= -1;
-                GetComponent<SpriteRenderer>().flipX = true;
-                _lever.Rotate(new Vector3(0,0,180));
             }
             
 
@@ -112,8 +110,12 @@ namespace Assets.Scripts
             var projectileRigidBody = projectileObject.GetComponent<Rigidbody2D>();
             var projectile = projectileObject.GetComponent<Projectile>();
 
+            var direction = _lever.transform.up;
+            if (!_isLeftPlayer)
+                direction *= -1;
+
             projectileObject.transform.localScale = Vector3.one * .1f;
-            projectileRigidBody.AddForce(_lever.transform.up * _force, ForceMode2D.Impulse);
+            projectileRigidBody.AddForce(direction * _force, ForceMode2D.Impulse);
             projectile.Shooter = gameObject;
 
             FinishedTurn();
@@ -130,7 +132,7 @@ namespace Assets.Scripts
         private void SetAngle(float speed)
         {
             var newAngle = _lever.localEulerAngles.z + speed;
-
+            
             if (!(newAngle + _angleSpeed > _minAngle && newAngle + _angleSpeed < _maxAngle))
                 newAngle = _lever.localEulerAngles.z;
             _lever.localEulerAngles = new Vector3(_lever.localEulerAngles.x, _lever.localEulerAngles.y, newAngle);

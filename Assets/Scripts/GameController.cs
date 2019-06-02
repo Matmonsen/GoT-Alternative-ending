@@ -23,7 +23,6 @@ namespace Assets.Scripts
         private Text _playerRightText;
 
         private Canvas _canvas;
-        private Text _winnerText;
         private GameObject _gameEnded;
 
         void Awake()
@@ -33,7 +32,6 @@ namespace Assets.Scripts
 
             _canvas = GameObject.Find("MainUICanvas").GetComponent<Canvas>();
             _gameEnded = _canvas.transform.Find("GameEnded").gameObject;
-            _winnerText = _gameEnded.transform.Find("Winner").Find("WinnerText").GetComponent<Text>();
 
             _playerLeftHealth = _canvas.transform.Find("Left").Find("Healthbar").Find("Green").GetComponent<Image>();
             _playerRightHealth = _canvas.transform.Find("Right").Find("Healthbar").Find("Green").GetComponent<Image>();
@@ -69,6 +67,14 @@ namespace Assets.Scripts
 
         private void SetPlayer(GameObject player)
         {
+            if (player == null)
+            {
+                CurrentPlayer = new GameObject("NO NAME");
+                _playerRightText.text = _playerRight.name;
+                _playerLeftText.text = _playerLeft.name;
+                return;
+            }
+
             CurrentPlayer = player;
             CurrentPlayer.GetComponent<Player>().SetTurn();
 
@@ -90,8 +96,9 @@ namespace Assets.Scripts
         {
             Time.timeScale = 0;
             _gameEnded.SetActive(true);
-            _winnerText.text = player.name == _playerLeft.name ? _playerRight.name : _playerLeft.name;
-            _canvas.transform.Find("Turn").gameObject.SetActive(false);
+            _canvas.transform.Find("Left").gameObject.SetActive(false);
+            _canvas.transform.Find("Right").gameObject.SetActive(false);
+
         }
 
         void SetHealthbar(Image healthbar, float percentage)
