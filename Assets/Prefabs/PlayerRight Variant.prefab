@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 1891131139236904969, guid: 64e58183baf59e243824abe5dc031326,
         type: 3}
       propertyPath: m_Name
-      value: PlayerRight
+      value: PlayerRight Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1891131139236904971, guid: 64e58183baf59e243824abe5dc031326,
         type: 3}
@@ -145,6 +145,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_FlipY
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6111087462229680862, guid: 64e58183baf59e243824abe5dc031326,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1819075093
+      objectReference: {fileID: 0}
+    - target: {fileID: 6111087462229680862, guid: 64e58183baf59e243824abe5dc031326,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64e58183baf59e243824abe5dc031326, type: 3}
