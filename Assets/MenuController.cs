@@ -46,9 +46,9 @@ public class MenuController : MonoBehaviour
         _pressedStartGame = true;
         _button.gameObject.SetActive(false);
         // TODO: Create generic hide method
-        _flag1 = GameObject.Find("Flag1").GetComponent<Image>();
+      //  _flag1 = GameObject.Find("Flag1").GetComponent<Image>();
         _flag1.gameObject.SetActive(false);
-        _flag2 = GameObject.Find("Flag2").GetComponent<Image>();
+       // _flag2 = GameObject.Find("Flag2").GetComponent<Image>();
         _flag2.gameObject.SetActive(false);
 
         _runSaveAnimation = true;
