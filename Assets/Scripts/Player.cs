@@ -67,7 +67,6 @@ namespace Assets.Scripts
 
         private void Update()
         {
-            Debug.Log(name + " " + _isMyTurn);
             if (!_isMyTurn)
                 return;
 

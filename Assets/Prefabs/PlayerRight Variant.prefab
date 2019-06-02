@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 1891131139236904969, guid: 64e58183baf59e243824abe5dc031326,
         type: 3}
       propertyPath: m_Name
-      value: PlayerRight Variant
+      value: PlayerRight
       objectReference: {fileID: 0}
     - target: {fileID: 1891131139236904971, guid: 64e58183baf59e243824abe5dc031326,
         type: 3}
@@ -67,5 +67,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4802900507815049565, guid: 64e58183baf59e243824abe5dc031326,
+        type: 3}
+      propertyPath: _maxHealth
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4802900507815049565, guid: 64e58183baf59e243824abe5dc031326,
+        type: 3}
+      propertyPath: _killedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 60df4dc322b65e443991efe1716e8143,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 64e58183baf59e243824abe5dc031326, type: 3}
