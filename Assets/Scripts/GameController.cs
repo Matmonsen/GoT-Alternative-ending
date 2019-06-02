@@ -15,7 +15,7 @@ namespace Assets.Scripts
 
         void Awake()
         {
-            _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+            _canvas = GameObject.Find("MainUICanvas").GetComponent<Canvas>();
             _turnText = _canvas.transform.Find("Turn").Find("TurnText").GetComponent<Text>();
         }
 
